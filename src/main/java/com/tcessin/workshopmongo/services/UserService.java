@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tcessin.workshopmongo.domain.User;
+import com.tcessin.workshopmongo.dto.UserDTO;
 import com.tcessin.workshopmongo.repository.UserRepository;
 import com.tcessin.workshopmongo.services.exception.ObjectNotFoundException;
 
@@ -14,15 +15,41 @@ import com.tcessin.workshopmongo.services.exception.ObjectNotFoundException;
 public class UserService {
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserRepository repo;
 
 	public List<User> findAll() {
-		return userRepository.findAll();
+		return repo.findAll();
 	}
 
 	public User findById(String id) {
-		Optional<User> obj = userRepository.findById(id);
+		Optional<User> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
+	}
+
+	public User insert(User obj) {
+		return repo.insert(obj);
+	}
+
+	public User fromDTO(UserDTO obj) {
+		return new User(obj.getId(), obj.getName(), obj.getEmail());
+	}
+
+	public void delete(String id) {
+		repo.findById(id);
+		repo.deleteById(id);
+
+	}
+
+	public User update(User obj) {
+		User newObj = findById(obj.getId());
+		updateData(newObj, obj);
+		return repo.save(newObj);
+	}
+
+	private void updateData(User newObj, User obj) {
+
+		newObj.setName(obj.getName());
+		newObj.setEmail(obj.getEmail());
 	}
 
 }
