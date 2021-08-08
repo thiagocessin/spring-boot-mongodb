@@ -1,19 +1,22 @@
 package com.tcessin.workshopmongo.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.tcessin.workshopmongo.dto.AuthorDTO;
+import com.tcessin.workshopmongo.dto.CommentDTO;
 
 @Document
 public class Post implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	private String id;
 	private Date data;
@@ -21,19 +24,28 @@ public class Post implements Serializable {
 	private String body;
 	private AuthorDTO author;
 
+	private List<CommentDTO> comments = new ArrayList<>();
+
 	public Post() {
 	}
 
-	public Post(String id, Date data, String title, String body,AuthorDTO author) {
+	public Post(String id, Date data, String title, String body, AuthorDTO author) {
 		super();
 		this.id = id;
 		this.data = data;
 		this.title = title;
 		this.body = body;
-		this.author =author;
+		this.author = author;
 	}
 
-	
+	public List<CommentDTO> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<CommentDTO> comments) {
+		this.comments = comments;
+	}
+
 	public AuthorDTO getAuthor() {
 		return author;
 	}
